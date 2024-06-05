@@ -1,10 +1,10 @@
-ARG GO_VERSION=1.21.10
+ARG GO_VERSION=1.21.11
 
 FROM ghcr.io/loong64/golang:${GO_VERSION}-trixie AS builder
 
 ARG RUNC_VERSION=v1.1.12
-ARG CONTAINERD_VERSION=v1.7.15
-ARG DOCKER_VERSION=v26.1.3
+ARG CONTAINERD_VERSION=v1.7.18
+ARG DOCKER_VERSION=v26.1.4
 ARG TINI_VERSION=v0.19.0
 
 RUN set -ex; \
@@ -86,7 +86,7 @@ RUN set -ex; \
     rm -rf docker
 
 FROM ghcr.io/loong64/debian:trixie-slim
-ARG DOCKER_VERSION=v26.1.3
+ARG DOCKER_VERSION=v26.1.4
 
 COPY --from=builder /opt /opt
 WORKDIR /opt
