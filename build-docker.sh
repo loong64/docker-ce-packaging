@@ -33,9 +33,9 @@ GO_IMAGE=golang:${GO_VERSION}-trixie
 #
 
 sed -i 's@DEBIAN_VERSIONS ?= debian-bullseye@DEBIAN_VERSIONS ?= debian-trixie debian-bullseye@g' deb/Makefile
-sed -i 's@docker build @docker buildx build --platform linux/loong64 --load @g' deb/Makefile
+sed -i 's@docker build @docker buildx build --load @g' deb/Makefile
 
-make ARCH=loongarch64 ARCHES=loong64 REF=${REF} VERSION=${VERSION} GO_VERSION=${GO_VERSION} GO_IMAGE=${GO_IMAGE} debian-trixie
+make ARCH=loong64 ARCHES=loong64 REF=${REF} VERSION=${VERSION} GO_VERSION=${GO_VERSION} GO_IMAGE=${GO_IMAGE} debian-trixie
 
 popd || exit 1
 
