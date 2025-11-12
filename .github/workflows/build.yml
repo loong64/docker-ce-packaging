@@ -17,6 +17,9 @@ jobs:
         id: get-version
         run: |
           DOCKER_VERSION=$(curl -s "https://api.github.com/repos/moby/moby/releases/latest" | jq -r ".tag_name")
+          # docker-v29.0.0 --> v29.0.0
+          DOCKER_VERSION=${DOCKER_VERSION#*-}
+
           if [ -z "$DOCKER_VERSION" ] || [ "$DOCKER_VERSION" == "null" ]; then
             echo "Failed to get latest version"
             exit 1

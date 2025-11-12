@@ -9,7 +9,7 @@ FROM ghcr.io/loong64/${GO_IMAGE} AS golang
 
 FROM ghcr.io/loong64/${BUILD_IMAGE}
 ENV GOPROXY=https://proxy.golang.org|direct
-ENV GO111MODULE=off
+ENV GO111MODULE=on
 ENV GOPATH=/go
 ENV GOTOOLCHAIN=local
 ENV PATH=$PATH:/usr/local/go/bin:$GOPATH/bin

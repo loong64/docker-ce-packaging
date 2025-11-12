@@ -49,7 +49,7 @@ RUN make; \
 
 WORKDIR /go/src/github.com/docker
 RUN set -ex; \
-    git clone -b ${DOCKER_VERSION} https://github.com/moby/moby docker --depth=1
+    git clone -b docker-${DOCKER_VERSION} https://github.com/moby/moby docker --depth=1
 
 WORKDIR /go/src/github.com/docker/docker
 RUN mkdir bin; \
