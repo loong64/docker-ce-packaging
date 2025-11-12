@@ -84,10 +84,10 @@ sed -i 's@docker build @docker buildx build --load @g' deb/Makefile
 
 if [ "${BUILD_DEB}" = '1' ]; then
     sed -i 's@FROM @FROM ghcr.io/loong64/@g' deb/debian-trixie/Dockerfile
-    make ARCH=loong64 ARCHES=loong64 REF=${REF} VERSION=${VERSION} GO_VERSION=${GO_VERSION} GO_IMAGE=${GO_IMAGE} debian-trixie
+    make ARCH=loong64 ARCHES=loong64 VERSION=${VERSION} REF=${REF} DOCKER_ENGINE_REF=docker-${REF} GO_VERSION=${GO_VERSION} GO_IMAGE=${GO_IMAGE} debian-trixie
 fi
 if [ "${BUILD_RPM}" = '1' ]; then
-    make ARCH=loong64 ARCHES=loong64 REF=${REF} VERSION=${VERSION} GO_VERSION=${GO_VERSION} GO_IMAGE=${GO_IMAGE} fedora-41
+    make ARCH=loong64 ARCHES=loong64 VERSION=${VERSION} REF=${REF} DOCKER_ENGINE_REF=docker-${REF} GO_VERSION=${GO_VERSION} GO_IMAGE=${GO_IMAGE} fedora-41
 fi
 
 popd || exit 1
