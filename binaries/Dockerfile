@@ -7,6 +7,15 @@ ARG CONTAINERD_VERSION=v1.7.24
 ARG DOCKER_VERSION=v27.4.0
 ARG TINI_VERSION=v0.19.0
 
+RUN echo "deb http://snapshot.debian.org/archive/debian-ports/20250801T194242Z/ sid main" > /etc/apt/sources.list && \
+    ( echo 'quiet "true";'; \
+      echo 'APT::Get::Assume-Yes "true";'; \
+      echo 'APT::Install-Recommends "false";'; \
+      echo 'Acquire::Check-Valid-Until "false";'; \
+      echo 'Acquire::Retries "5";'; \
+    ) > /etc/apt/apt.conf.d/99cpython-portable && \
+    rm -f /etc/apt/sources.list.d/*
+
 RUN set -ex; \
     ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime; \
     apt-get update; \

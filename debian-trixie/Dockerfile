@@ -1,0 +1,49 @@
+# syntax=docker/dockerfile:1
+
+ARG GO_IMAGE=golang:latest
+ARG DISTRO=debian
+ARG SUITE=trixie
+ARG VERSION_ID=13
+ARG BUILD_IMAGE=${DISTRO}:${SUITE}
+
+FROM ghcr.io/loong64/${GO_IMAGE} AS golang
+
+FROM ghcr.io/loong64/${BUILD_IMAGE}
+
+RUN echo "deb http://snapshot.debian.org/archive/debian-ports/20250801T194242Z/ sid main" > /etc/apt/sources.list && \
+    ( echo 'quiet "true";'; \
+      echo 'APT::Get::Assume-Yes "true";'; \
+      echo 'APT::Install-Recommends "false";'; \
+      echo 'Acquire::Check-Valid-Until "false";'; \
+      echo 'Acquire::Retries "5";'; \
+    ) > /etc/apt/apt.conf.d/99cpython-portable && \
+    rm -f /etc/apt/sources.list.d/*
+
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y curl devscripts equivs git
+
+ENV GOPROXY=https://proxy.golang.org|direct
+ENV GO111MODULE=on
+ENV GOPATH=/go
+ENV GOTOOLCHAIN=local
+ENV PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+
+ARG COMMON_FILES
+COPY --link ${COMMON_FILES} /root/build-deb/debian
+RUN apt-get update \
+ && mk-build-deps -t "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y" -i /root/build-deb/debian/control
+
+COPY --link sources/ /sources
+ARG DISTRO
+ARG SUITE
+ARG VERSION_ID
+ENV DISTRO=${DISTRO}
+ENV SUITE=${SUITE}
+ENV VERSION_ID=${VERSION_ID}
+
+COPY --link --from=golang /usr/local/go /usr/local/go
+
+WORKDIR /root/build-deb
+COPY build-deb /root/build-deb/build-deb
+
+ENTRYPOINT ["/root/build-deb/build-deb"]
