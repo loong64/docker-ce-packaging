@@ -1,10 +1,10 @@
-ARG GO_VERSION=1.23.4
+ARG GO_VERSION=1.25.6
 
 FROM ghcr.io/loong64/golang:${GO_VERSION}-trixie AS builder
 
-ARG RUNC_VERSION=v1.2.2
-ARG CONTAINERD_VERSION=v1.7.24
-ARG DOCKER_VERSION=v27.4.0
+ARG RUNC_VERSION=v1.3.4
+ARG CONTAINERD_VERSION=v2.2.1
+ARG DOCKER_VERSION=v29.2.1
 ARG TINI_VERSION=v0.19.0
 
 RUN echo "deb http://snapshot.debian.org/archive/debian-ports/20250801T194242Z/ sid main" > /etc/apt/sources.list && \
@@ -97,7 +97,7 @@ RUN set -ex; \
     rm -rf docker
 
 FROM ghcr.io/loong64/debian:trixie-slim
-ARG DOCKER_VERSION=v27.0.1
+ARG DOCKER_VERSION=v29.2.1
 
 COPY --from=builder /opt /opt
 WORKDIR /opt
