@@ -19,7 +19,7 @@ ARG SUITE
 ENV DISTRO=${DISTRO}
 ENV SUITE=${SUITE}
 RUN dnf install -y rpm-build dnf-plugins-core
-# FIXME(thaJeztah): workaround for building on Fedora 41 on arm64
+# FIXME(thaJeztah): workaround for building on Fedora 41 and up on arm64
 #
 # This is the equivalent of https://github.com/docker/containerd-packaging/pull/390
 # for containerd packages, but unlike for containerd packages, we currently do
@@ -42,7 +42,8 @@ RUN dnf install -y rpm-build dnf-plugins-core
 # - https://src.fedoraproject.org/rpms/golang/c/a867bd88a656c1d6e91e7b18bab696dc3fcf1e77?branch=rawhide
 #
 # As a workaround; install binutils-gold
-RUN if [ "$(arch)" = 'aarch64' ]; then dnf -y install binutils-gold; fi
+RUN if [ "$(rpm --query --queryformat='%{ARCH}' rpm)" = 'aarch64' ] && ! command -v ld.gold; then dnf -y install binutils-gold; fi
+
 COPY --link SPECS /root/rpmbuild/SPECS
 RUN dnf builddep -y /root/rpmbuild/SPECS/*.spec
 COPY --link --from=golang /usr/local/go /usr/local/go

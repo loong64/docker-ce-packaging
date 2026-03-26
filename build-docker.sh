@@ -52,11 +52,11 @@ case "${DISTRO}" in
         ;;
     anolis)
         BUILD_RPM=1
-        cp -f anolis-23/Dockerfile "${TMPDIR}/rpm/fedora-41/Dockerfile"
+        cp -f anolis-23/Dockerfile "${TMPDIR}/rpm/fedora-42/Dockerfile"
         ;;
     opencloudos)
         BUILD_RPM=1
-        cp -f opencloudos-23/Dockerfile "${TMPDIR}/rpm/fedora-41/Dockerfile"
+        cp -f opencloudos-23/Dockerfile "${TMPDIR}/rpm/fedora-42/Dockerfile"
         ;;
     *)
         echo "Error: Unknown distribution ${DISTRO}"
@@ -87,7 +87,7 @@ if [ "${BUILD_DEB}" = '1' ]; then
     make ARCH=loong64 ARCHES=loong64 VERSION=${VERSION} REF=${REF} DOCKER_ENGINE_REF=docker-${REF} GO_VERSION=${GO_VERSION} GO_IMAGE=${GO_IMAGE} debian-trixie
 fi
 if [ "${BUILD_RPM}" = '1' ]; then
-    make ARCH=loong64 ARCHES=loong64 VERSION=${VERSION} REF=${REF} DOCKER_ENGINE_REF=docker-${REF} GO_VERSION=${GO_VERSION} GO_IMAGE=${GO_IMAGE} fedora-41
+    make ARCH=loong64 ARCHES=loong64 VERSION=${VERSION} REF=${REF} DOCKER_ENGINE_REF=docker-${REF} GO_VERSION=${GO_VERSION} GO_IMAGE=${GO_IMAGE} fedora-42
 fi
 
 popd || exit 1
@@ -98,7 +98,7 @@ if [ "${BUILD_DEB}" = '1' ]; then
     mv ${TMPDIR}/deb/debbuild/debian-trixie/* dist/
 fi
 if [ "${BUILD_RPM}" = '1' ]; then
-    mv ${TMPDIR}/rpm/rpmbuild/fedora-41/* dist/
+    mv ${TMPDIR}/rpm/rpmbuild/fedora-42/* dist/
 fi
 
 rm -rf "${TMPDIR:?}"
