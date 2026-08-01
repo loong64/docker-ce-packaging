@@ -19,10 +19,6 @@ RUN set -ex; \
 
 WORKDIR /go/src/github.com/opencontainers/runc
 RUN set -ex; \
-    curl -sSL "https://github.com/loong64/containerd-packaging/raw/refs/heads/main/runc.patch" | git apply; \
-    go get -u github.com/seccomp/libseccomp-golang@v0.10.1-0.20240814065753-28423ed7600d; \
-    go mod vendor; \
-    sed -i 's@--dirty @@g' Makefile; \
     make static; \
     ./runc -v
 
@@ -31,10 +27,7 @@ RUN set -ex; \
     git clone -b ${CONTAINERD_VERSION} https://github.com/containerd/containerd --depth=1
 
 WORKDIR /go/src/github.com/containerd/containerd
-RUN sed -i 's@arm64 || mipsle@arm64 || loong64 || mipsle@g' vendor/github.com/cilium/ebpf/internal/endian_le.go; \
-    sed -i 's@ppc64le riscv64@ppc64le riscv64 loong64@g' vendor/github.com/cilium/ebpf/internal/endian_le.go; \
-    sed -i "s@--dirty='.m' @@g" Makefile; \
-    sed -i 's@$(shell if ! git diff --no-ext-diff --quiet --exit-code; then echo .m; fi)@@g' Makefile; \
+RUN set -ex; \
     make STATIC=True; \
     ./bin/containerd -v; \
     ./bin/ctr -v
