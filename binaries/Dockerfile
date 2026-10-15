@@ -19,7 +19,7 @@ RUN set -ex; \
 
 WORKDIR /go/src/github.com/opencontainers/runc
 RUN set -ex; \
-    make static; \
+    make RUNC_BUILDTAGS="-libpathrs" static; \
     ./runc -v
 
 WORKDIR /go/src/github.com/containerd
